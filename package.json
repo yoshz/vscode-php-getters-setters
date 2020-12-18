@@ -44,6 +44,11 @@
                     "default": true,
                     "description": "Redirect to generated functions after creating them?"
                 },
+                "phpGettersSetters.docBlock": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Generate function docBlock for the setter and getter"
+                },
                 "phpGettersSetters.spacesAfterParam": {
                     "type": "integer",
                     "default": 2,

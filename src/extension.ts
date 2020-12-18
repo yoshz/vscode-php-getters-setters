@@ -126,12 +126,15 @@ class Resolver {
 
         return  (
             `\n`
-            + tab + `/**\n`
-            + tab + ` * ` + prop.getterDescription() + `\n`
-            + (type ? tab + ` *\n` : ``)
-            + (type ? tab + ` * @return` + spacesAfterReturn + type + `\n` : ``)
-            + tab + ` */\n`
-            + tab + `public function ` + prop.getterName() + `()\n`
+            + (this.config.get('docBlock', true) ?
+                tab + `/**\n`
+                + tab + ` * ` + prop.getterDescription() + `\n`
+                + (type ? tab + ` *\n` : ``)
+                + (type ? tab + ` * @return` + spacesAfterReturn + type + `\n` : ``)
+                + tab + ` */\n`
+             : '')
+            + tab + `public function ` + prop.getterName() + `()`
+            + (type && type !== null ? `: ${type}\n` : '\n')
             + tab + `{\n`
             + tab + tab + `return $this->` + name + `;\n`
             + tab + `}\n`
@@ -158,14 +161,16 @@ class Resolver {
 
         return (
             `\n`
-            + tab + `/**\n`
-            + tab + ` * ` + prop.setterDescription() + `\n`
-            + (type ? tab + ` *\n` : ``)
-            + (type ? tab + ` * @param` + spacesAfterParam + type + spacesAfterParamVar + `$` + name + (description ? `  ` + description : ``) + `\n` : ``)
-            + tab + ` *\n`
-            + tab + ` * @return` + spacesAfterReturn + `self\n`
-            + tab + ` */\n`
-            + tab + `public function ` + prop.setterName() + `(` + (typeHint ? typeHint + ` ` : ``) + `$` + name + `)\n`
+            + (this.config.get('docBlock', true) ?
+                tab + `/**\n`
+                + tab + ` * ` + prop.setterDescription() + `\n`
+                + (type ? tab + ` *\n` : ``)
+                + (type ? tab + ` * @param` + spacesAfterParam + type + spacesAfterParamVar + `$` + name + (description ? `  ` + description : ``) + `\n` : ``)
+                + tab + ` *\n`
+                + tab + ` * @return` + spacesAfterReturn + `self\n`
+                + tab + ` */\n`
+                : '')
+            + tab + `public function ` + prop.setterName() + `(` + (typeHint ? typeHint + ` ` : ``) + `$` + name + `): self\n`
             + tab+ `{\n`
             + tab + tab + `$this->` + name + ` = $` + name + `;\n`
             + `\n`
