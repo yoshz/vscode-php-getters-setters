@@ -1,3 +1,12 @@
+This repository is forked from unmaintained phproberto/vscode-php-getters-setters
+and is updated to support PHP 7.4 typed properties.
+
+Local installation
+```bash
+vsce package
+code --install-extension vscode-php-getters-setters-1.3.0.vsix
+```
+
 # PHP getters and setters for Visual Studio Code
 
 > Fast generator of getters and setters for your PHP class properties.
@@ -90,6 +99,13 @@ As you can see a [Property](blob/master/src/Property.ts) object is passed to tem
 ## Release Notes
 
 Relevant releases:
+
+### 1.3.0
+
+* Forked from [phproberto/vscode-php-getters-setters](https://github.com/phproberto/vscode-php-getters-setters)
+* Added support for PHP 7.4 typed properties
+* Added support for translating snakecase properties to camelcase functions
+* Property name doesn't have to be selected anymore, cursor just has to be on the same line.
 
 ### 1.2.0
 * Added support for custom templates
