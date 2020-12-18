@@ -34,6 +34,13 @@ export default class Property {
         const activeLineNumber = activePosition.line;
         const activeLine = editor.document.lineAt(activeLineNumber);
 
+        const activeLineTokens = activeLine.text.slice(0, -1).split(' ');
+        const typehint = activeLineTokens[activeLineTokens.indexOf(selectedWord) - 1];
+
+        if (typehint !== 'public' && typehint !== 'private' && typehint !== 'protected') {
+            property.setType(typehint);
+        }
+
         property.indentation = activeLine.text.substring(0, activeLine.firstNonWhitespaceCharacterIndex);
 
         const previousLineNumber = activeLineNumber - 1;
@@ -105,7 +112,10 @@ export default class Property {
     }
 
     generateMethodName(prefix : string) : string {
-        return prefix + this.name.charAt(0).toUpperCase() + this.name.substring(1);
+        let name = this.name.split('_')
+            .map(str => str.charAt(0).toLocaleUpperCase() + str.slice(1))
+            .join('');
+        return prefix + name;
     }
 
     getDescription() : string {
