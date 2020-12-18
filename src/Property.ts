@@ -17,27 +17,21 @@ export default class Property {
     }
 
     static fromEditorPosition(editor: vscode.TextEditor, activePosition: vscode.Position) {
-        const wordRange = editor.document.getWordRangeAtPosition(activePosition);
-
-        if (wordRange === undefined) {
-            throw new Error('No property found. Please select a property to use this extension.');
-        }
-
-        const selectedWord = editor.document.getText(wordRange);
-
-        if (selectedWord[0] !== '$') {
-            throw new Error('No property found. Please select a property to use this extension.');
-        }
-
-        let property = new Property(selectedWord.substring(1, selectedWord.length));
-
         const activeLineNumber = activePosition.line;
         const activeLine = editor.document.lineAt(activeLineNumber);
+        const activeLineTokens = activeLine.text.trim().slice(0, -1).split(' ');
 
-        const activeLineTokens = activeLine.text.slice(0, -1).split(' ');
-        const typehint = activeLineTokens[activeLineTokens.indexOf(selectedWord) - 1];
+        const variable = activeLineTokens.find((token) => token[0] === '$');
+        if (!variable) {
+            throw new Error('No property found. Please select a property to use this extension.');
+        }
+        let property = new Property(variable.substring(1, variable.length));
 
-        if (typehint !== 'public' && typehint !== 'private' && typehint !== 'protected') {
+        let typehint = activeLineTokens.shift();
+        if (typehint === 'public' || typehint === 'private' || typehint === 'protected') {
+            typehint = activeLineTokens.shift();
+        }
+        if (typehint && typehint !== variable) {
             property.setType(typehint);
         }
 
